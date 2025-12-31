@@ -5,7 +5,6 @@
   "author": "Alger <algerkc@qq.com>",
   "homepage": "https://github.com/algerkong/AlgerMusicPlayer",
   "scripts": {
-    "prepare": "husky",
     "format": "prettier --write ./src",
     "lint": "eslint ./src --fix",
     "typecheck:web": "vue-tsc --noEmit -p tsconfig.web.json --composite false",
