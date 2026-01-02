@@ -8,6 +8,12 @@ import i18n from '@/../i18n/renderer';
 import router from '@/router';
 import pinia from '@/store';
 
+// 在 Web 环境中加载适配器
+if (typeof window !== 'undefined' && !window.electron) {
+  // 动态导入 Web 适配器
+  import('../preload/web-adapter.js');
+}
+
 import App from './App.vue';
 import directives from './directive';
 import { initAppShortcuts } from './utils/appShortcuts';

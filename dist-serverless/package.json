@@ -1,0 +1,32 @@
+{
+  "name": "alger-music-player-serverless",
+  "version": "1.0.0",
+  "description": "Alger Music Player for Serverless Environment",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "build": "npm run build:web",
+    "build:web": "vite build --config electron.vite.config.ts",
+    "deploy": "node deploy.js"
+  },
+  "dependencies": {
+    "express": "^4.22.1",
+    "cors": "^2.8.5",
+    "node-fetch": "^2.7.0",
+    "netease-cloud-music-api-alger": "^4.26.1",
+    "@unblockneteasemusic/server": "^0.27.10",
+    "form-data": "^4.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "keywords": [
+    "music-player",
+    "serverless",
+    "alger-music",
+    "netease-cloud-music"
+  ],
+  "author": "Alger",
+  "license": "MIT"
+}

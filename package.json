@@ -15,12 +15,19 @@
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
     "dev:web": "vite dev",
+    "dev:serverless": "cross-env BUILD_TARGET=serverless vite -c vite.serverless.config.ts",
     "build": "electron-vite build",
+    "build:web": "vite build",
+    "build:serverless": "electron-vite build --config electron.vite.config.ts && xcopy /E /I out\\renderer dist",
     "postinstall": "electron-builder install-app-deps",
     "build:unpack": "npm run build && electron-builder --dir",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "npm run build && electron-builder --mac",
-    "build:linux": "npm run build && electron-builder --linux"
+    "build:linux": "npm run build && electron-builder --linux",
+    "serverless:dev": "nodemon serverless/index.js",
+    "serverless:start": "node serverless/index.js",
+    "serverless:build": "npm run build:serverless && npm run build:serverless-api",
+    "build:serverless-api": "node -e \"require('fs').copyFileSync('serverless/index.js', 'dist-serverless/index.js'); console.log('Serverless API copied')\" && xcopy /E /I serverless\\api dist-serverless\\api && xcopy /E /I serverless\\utils dist-serverless\\utils && xcopy /E /I serverless\\main dist-serverless\\main && xcopy /E /I serverless\\preload dist-serverless\\preload && copy serverless\\package.json dist-serverless\\ && copy serverless\\deploy.js dist-serverless\\"
   },
   "lint-staged": {
     "*.{ts,tsx,vue,js}": [
@@ -35,6 +42,7 @@
     "@electron-toolkit/utils": "^4.0.0",
     "@unblockneteasemusic/server": "^0.27.10",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "crypto-js": "^4.2.0",
     "electron-store": "^8.2.0",
     "electron-updater": "^6.6.2",
@@ -100,7 +108,9 @@
     "prettier": "^3.7.4",
     "remixicon": "^4.7.0",
     "sass": "^1.96.0",
+    "supertest": "^7.1.4",
     "tailwindcss": "^3.4.19",
+    "terser": "^5.44.1",
     "tinycolor2": "^1.6.0",
     "tunajs": "^1.0.15",
     "typescript": "^5.9.3",

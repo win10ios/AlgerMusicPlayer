@@ -54,7 +54,7 @@ export const textColors = ref<any>(getTextColors());
 export let playMusic: ComputedRef<SongResult>;
 export let artistList: ComputedRef<Artist[]>;
 
-export const musicDB = await useIndexedDB(
+const musicDBPromise = useIndexedDB(
   'musicDB',
   [
     { name: 'music', keyPath: 'id' },
@@ -65,6 +65,33 @@ export const musicDB = await useIndexedDB(
   ],
   3
 );
+
+export const musicDB = {
+  async addData(storeName: any, value: any) {
+    const db = await musicDBPromise;
+    return db.addData(storeName, value);
+  },
+  async saveData(storeName: any, value: any) {
+    const db = await musicDBPromise;
+    return db.saveData(storeName, value);
+  },
+  async getData(storeName: any, key: any) {
+    const db = await musicDBPromise;
+    return db.getData(storeName, key);
+  },
+  async deleteData(storeName: any, key: any) {
+    const db = await musicDBPromise;
+    return db.deleteData(storeName, key);
+  },
+  async getAllData(storeName: any) {
+    const db = await musicDBPromise;
+    return db.getAllData(storeName);
+  },
+  async getDataWithPagination(storeName: any, page: number, pageSize: number) {
+    const db = await musicDBPromise;
+    return db.getDataWithPagination(storeName, page, pageSize);
+  }
+};
 
 // 键盘事件处理器，在初始化后设置
 const setupKeyboardListeners = () => {

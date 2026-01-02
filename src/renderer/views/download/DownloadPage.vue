@@ -430,7 +430,7 @@ import { useI18n } from 'vue-i18n';
 import { getMusicDetail } from '@/api/music';
 import { usePlayerStore } from '@/store/modules/player';
 import type { SongResult } from '@/types/music';
-import { getImgUrl } from '@/utils';
+import { getImgUrl, isElectron } from '@/utils';
 
 const { t } = useI18n();
 const playerStore = usePlayerStore();
@@ -541,13 +541,22 @@ const getLocalFilePath = (path: string) => {
   return `local:///${encodeURIComponent(path)}`;
 };
 
-// 打开目录
+// 打开目录（仅桌面版支持）
 const openDirectory = (path: string) => {
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    message.warning(t('download.desktopOnly'));
+    return;
+  }
   window.electron.ipcRenderer.send('open-directory', path);
 };
 
 // 播放音乐
 const handlePlayMusic = async (item: DownloadedItem) => {
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    message.warning(t('download.desktopOnly'));
+    return;
+  }
+
   try {
     // 先检查文件是否存在
     const fileExists = await window.electron.ipcRenderer.invoke('check-file-exists', item.path);
@@ -619,6 +628,11 @@ const confirmDelete = async () => {
   const item = itemToDelete.value;
   if (!item) return;
 
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    message.warning(t('download.desktopOnly'));
+    return;
+  }
+
   try {
     const success = await window.electron.ipcRenderer.invoke('delete-downloaded-music', item.path);
 
@@ -644,6 +658,11 @@ const showClearConfirm = ref(false);
 
 // 清空下载记录
 const clearDownloadRecords = async () => {
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    message.warning(t('download.desktopOnly'));
+    return;
+  }
+
   try {
     downloadedList.value = [];
     localStorage.setItem('downloadedList', '[]');
@@ -682,6 +701,12 @@ const formatSongName = (songInfo) => {
 // 获取已下载音乐列表
 const refreshDownloadedList = async () => {
   if (isLoadingDownloaded.value) return; // 防止重复加载
+
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    downloadedList.value = [];
+    localStorage.setItem('downloadedList', '[]');
+    return;
+  }
 
   try {
     isLoadingDownloaded.value = true;
@@ -761,6 +786,10 @@ watch(
 // 初始化
 onMounted(() => {
   refreshDownloadedList();
+
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    return;
+  }
 
   // 记录已处理的下载项，避免重复触发事件
   const processedDownloads = new Set<string>();
@@ -945,6 +974,10 @@ const formatNamePreview = computed(() => {
 
 // 选择下载路径
 const selectDownloadPath = async () => {
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    message.warning(t('download.desktopOnly'));
+    return;
+  }
   const result = await window.electron.ipcRenderer.invoke('select-directory');
   if (result && !result.canceled && result.filePaths.length > 0) {
     downloadSettings.value.path = result.filePaths[0];
@@ -953,6 +986,10 @@ const selectDownloadPath = async () => {
 
 // 打开下载路径
 const openDownloadPath = () => {
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    message.warning(t('download.desktopOnly'));
+    return;
+  }
   if (downloadSettings.value.path) {
     window.electron.ipcRenderer.send('open-directory', downloadSettings.value.path);
   } else {
@@ -962,6 +999,10 @@ const openDownloadPath = () => {
 
 // 保存下载设置
 const saveDownloadSettings = () => {
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    message.warning(t('download.desktopOnly'));
+    return;
+  }
   // 保存到配置
   window.electron.ipcRenderer.send(
     'set-store-value',
@@ -990,6 +1031,9 @@ const saveDownloadSettings = () => {
 
 // 初始化下载设置
 const initDownloadSettings = async () => {
+  if (!isElectron || !window.electron?.ipcRenderer) {
+    return;
+  }
   // 获取当前配置
   const path = await window.electron.ipcRenderer.invoke('get-store-value', 'set.downloadPath');
   const nameFormat = await window.electron.ipcRenderer.invoke(
