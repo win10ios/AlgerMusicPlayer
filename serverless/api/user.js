@@ -1,23 +1,31 @@
 // serverless/api/user.js
 const express = require('express');
 const router = express.Router();
+const fetch = require('node-fetch');
 
-// 用户功能 API
-router.get('/info', async (req, res) => {
+// 用户相关的 API，代理到 netease-cloud-music-api
+router.get('/detail', async (req, res) => {
   try {
-    // 模拟用户信息响应
-    res.json({
-      code: 200,
-      data: {
-        id: 1,
-        nickname: 'Serverless User',
-        avatar: 'https://via.placeholder.com/100',
-        level: 10,
-        listenSongs: 1234
-      }
-    });
+    const { uid } = req.query;
+
+    if (!uid) {
+      return res.status(400).json({
+        code: 400,
+        message: 'User ID is required'
+      });
+    }
+
+    console.log('User detail request:', uid);
+
+    // 代理请求到 netease-cloud-music-api
+    const targetUrl = `http://localhost:30488/user/detail?uid=${uid}`;
+
+    const response = await fetch(targetUrl);
+    const data = await response.json();
+
+    res.json(data);
   } catch (error) {
-    console.error('User Info Error:', error);
+    console.error('User detail error:', error);
     res.status(500).json({
       code: 500,
       message: error.message
@@ -25,44 +33,34 @@ router.get('/info', async (req, res) => {
   }
 });
 
-router.get('/play-history', async (req, res) => {
+// 用户歌单
+router.get('/playlist', async (req, res) => {
   try {
-    // 模拟播放历史响应
-    res.json({
-      code: 200,
-      data: {
-        list: [
-          { id: 1, name: 'Song 1', artist: 'Artist 1', time: Date.now() - 3600000 },
-          { id: 2, name: 'Song 2', artist: 'Artist 2', time: Date.now() - 7200000 }
-        ]
-      }
-    });
-  } catch (error) {
-    console.error('Play History Error:', error);
-    res.status(500).json({
-      code: 500,
-      message: error.message
-    });
-  }
-});
+    const { uid, limit = 30, offset = 0 } = req.query;
 
-router.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
+    if (!uid) {
+      return res.status(400).json({
+        code: 400,
+        message: 'User ID is required'
+      });
+    }
 
-    // 模拟登录响应
-    res.json({
-      code: 200,
-      data: {
-        token: 'mock-token-' + Date.now(),
-        user: {
-          id: 1,
-          nickname: username
-        }
-      }
+    console.log('User playlist request:', uid);
+
+    const params = new URLSearchParams({
+      uid: uid,
+      limit: limit.toString(),
+      offset: offset.toString()
     });
+
+    const targetUrl = `http://localhost:30488/user/playlist?${params.toString()}`;
+
+    const response = await fetch(targetUrl);
+    const data = await response.json();
+
+    res.json(data);
   } catch (error) {
-    console.error('Login Error:', error);
+    console.error('User playlist error:', error);
     res.status(500).json({
       code: 500,
       message: error.message

@@ -18,6 +18,51 @@ if (!fs.existsSync(tokenPath)) {
   }
 }
 
+// 启动 netease-cloud-music-api 服务
+let ncmApiStarted = false;
+let ncmApiPort = 30488;
+let ncmApiServer = null;
+
+async function startNcmApi() {
+  if (ncmApiStarted) {
+    console.log('NCM API already started');
+    return;
+  }
+
+  try {
+    // 导入 netease-cloud-music-api-alger 的 server 模块
+    const server = require('netease-cloud-music-api-alger/server');
+
+    // 尝试启动服务
+    ncmApiServer = await server.serveNcmApi({
+      port: ncmApiPort
+    });
+    console.log(`NCM API STARTED on port ${ncmApiPort}`);
+    ncmApiStarted = true;
+  } catch (error) {
+    console.error(`NCM API 启动失败:`, error);
+    // 如果启动失败，尝试其他端口
+    ncmApiPort = 30489;
+    try {
+      const server = require('netease-cloud-music-api-alger/server');
+      ncmApiServer = await server.serveNcmApi({
+        port: ncmApiPort
+      });
+      console.log(`NCM API STARTED on port ${ncmApiPort}`);
+      ncmApiStarted = true;
+    } catch (retryError) {
+      console.error(`NCM API 重试启动失败:`, retryError);
+      // 在 serverless 环境中，我们可能无法启动服务，所以提供一个备用方案
+      // 不要让错误影响整个应用启动
+    }
+  }
+}
+
+// 在启动时尝试启动 NCM API，但不阻塞应用启动
+startNcmApi().catch((err) => {
+  console.error('Failed to start NCM API:', err);
+});
+
 // 创建 Express 应用
 const app = express();
 
@@ -37,15 +82,41 @@ if (fs.existsSync(staticPath)) {
   app.use(express.static(path.join(__dirname, '../resources')));
 }
 
-// API 路由 - 音乐相关功能
-app.use('/api/music', require('./api/music'));
-app.use('/api/search', require('./api/search'));
-app.use('/api/lyric', require('./api/lyric'));
-app.use('/api/user', require('./api/user'));
-app.use('/api/playlist', require('./api/playlist'));
-app.use('/api/artist', require('./api/artist'));
+// 安全导入 API 路由
+function safeImport(routePath) {
+  try {
+    const module = require(routePath);
+    if (module === undefined || module === null) {
+      console.error(`Module ${routePath} is undefined or null`);
+      const express = require('express');
+      const router = express.Router();
+      router.all('*', (req, res) => {
+        res.status(500).json({ error: `Module ${routePath} failed to load` });
+      });
+      return router;
+    }
+    return module;
+  } catch (error) {
+    console.error(`Failed to load module ${routePath}:`, error.message);
+    const express = require('express');
+    const router = express.Router();
+    router.all('*', (req, res) => {
+      res.status(500).json({ error: `Module ${routePath} error: ${error.message}` });
+    });
+    return router;
+  }
+}
 
-// 为缺少的路由创建占位符
+// API 路由 - 音乐相关功能
+app.use('/api/music', safeImport('./api/music'));
+app.use('/api/search', safeImport('./api/search'));
+app.use('/api/lyric', safeImport('./api/lyric'));
+app.use('/api/user', safeImport('./api/user'));
+app.use('/api/playlist', safeImport('./api/playlist'));
+app.use('/api/artist', safeImport('./api/artist'));
+app.use('/api/album', safeImport('./api/album'));
+
+// 为缺失的路由创建占位符
 const createPlaceholderRouter = (name) => {
   const router = require('express').Router();
   router.all('*', (req, res) => {
@@ -56,14 +127,13 @@ const createPlaceholderRouter = (name) => {
       path: req.path
     });
   });
-  return router;
+  return router; // 添加 return 语句
 };
 
-app.use('/api/album', createPlaceholderRouter('Album'));
 app.use('/api/mv', createPlaceholderRouter('MV'));
 
 // 其他 API 路由
-app.use('/api/lx-music', require('./api/lxMusicHttp'));
+app.use('/api/lx-music', safeImport('./api/lxMusicHttp'));
 
 // 处理所有其他路由，返回 index.html（用于前端路由）
 app.get('*', (req, res) => {
@@ -87,6 +157,7 @@ app.get('*', (req, res) => {
             <h1>AlgerMusicPlayer Serverless</h1>
             <p>应用尚未构建。请先运行构建命令。</p>
             <p>当前在 serverless 模式下运行。</p>
+            <p>NCM API Started: ${ncmApiStarted}, Port: ${ncmApiPort}</p>
             <div id="status">Server is running...</div>
             <script>
               // 简单的健康检查
@@ -109,7 +180,9 @@ app.get('/api/health', (req, res) => {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     environment: 'serverless',
-    version: '1.0.0'
+    version: '1.0.0',
+    ncmApiStarted: ncmApiStarted,
+    ncmApiPort: ncmApiPort
   });
 });
 

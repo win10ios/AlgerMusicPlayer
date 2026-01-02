@@ -1,65 +1,31 @@
 // serverless/api/playlist.js
 const express = require('express');
 const router = express.Router();
+const fetch = require('node-fetch');
 
-// 播放列表功能 API
-router.get('/list', async (req, res) => {
-  try {
-    // 模拟播放列表列表响应
-    res.json({
-      code: 200,
-      data: {
-        playlists: [
-          {
-            id: 1,
-            name: 'My Favorite Songs',
-            cover: 'https://via.placeholder.com/200',
-            creator: 'Serverless User',
-            trackCount: 25,
-            playCount: 12345
-          },
-          {
-            id: 2,
-            name: 'Chill Vibes',
-            cover: 'https://via.placeholder.com/200',
-            creator: 'Serverless User',
-            trackCount: 30,
-            playCount: 9876
-          }
-        ]
-      }
-    });
-  } catch (error) {
-    console.error('Playlist List Error:', error);
-    res.status(500).json({
-      code: 500,
-      message: error.message
-    });
-  }
-});
-
+// 播放列表相关的 API，代理到 netease-cloud-music-api
 router.get('/detail', async (req, res) => {
   try {
     const { id } = req.query;
 
-    // 模拟播放列表详情响应
-    res.json({
-      code: 200,
-      data: {
-        id: id || 1,
-        name: 'My Favorite Songs',
-        cover: 'https://via.placeholder.com/200',
-        creator: 'Serverless User',
-        description: 'A collection of my favorite songs',
-        tracks: [
-          { id: 101, name: 'Song 1', artist: 'Artist 1', duration: 245 },
-          { id: 102, name: 'Song 2', artist: 'Artist 2', duration: 198 },
-          { id: 103, name: 'Song 3', artist: 'Artist 3', duration: 210 }
-        ]
-      }
-    });
+    if (!id) {
+      return res.status(400).json({
+        code: 400,
+        message: 'Playlist ID is required'
+      });
+    }
+
+    console.log('Playlist detail request:', id);
+
+    // 代理请求到 netease-cloud-music-api
+    const targetUrl = `http://localhost:30488/playlist/track/all?id=${id}`;
+
+    const response = await fetch(targetUrl);
+    const data = await response.json();
+
+    res.json(data);
   } catch (error) {
-    console.error('Playlist Detail Error:', error);
+    console.error('Playlist detail error:', error);
     res.status(500).json({
       code: 500,
       message: error.message
@@ -67,22 +33,28 @@ router.get('/detail', async (req, res) => {
   }
 });
 
-router.post('/create', async (req, res) => {
+// 播放列表信息
+router.get('/info', async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { id } = req.query;
 
-    // 模拟创建播放列表响应
-    res.json({
-      code: 200,
-      data: {
-        id: Date.now(),
-        name,
-        description,
-        cover: 'https://via.placeholder.com/200'
-      }
-    });
+    if (!id) {
+      return res.status(400).json({
+        code: 400,
+        message: 'Playlist ID is required'
+      });
+    }
+
+    console.log('Playlist info request:', id);
+
+    const targetUrl = `http://localhost:30488/playlist/detail?id=${id}`;
+
+    const response = await fetch(targetUrl);
+    const data = await response.json();
+
+    res.json(data);
   } catch (error) {
-    console.error('Playlist Create Error:', error);
+    console.error('Playlist info error:', error);
     res.status(500).json({
       code: 500,
       message: error.message

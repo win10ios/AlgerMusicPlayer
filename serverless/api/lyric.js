@@ -1,43 +1,31 @@
 // serverless/api/lyric.js
 const express = require('express');
 const router = express.Router();
+const fetch = require('node-fetch');
 
-// 歌词功能 API
-router.get('/get', async (req, res) => {
+// 歌词 API，代理到 netease-cloud-music-api
+router.get('/', async (req, res) => {
   try {
     const { id } = req.query;
 
-    // 模拟歌词获取响应
-    res.json({
-      code: 200,
-      data: {
-        id: id || 0,
-        lyric: `[00:00.000] 歌词加载中...\n[00:10.000] 欢迎使用 AlgerMusicPlayer\n[00:15.000] 这是在 serverless 环境中的演示`,
-        tlyric: `[00:00.000] Lyrics loading...\n[00:10.000] Welcome to AlgerMusicPlayer\n[00:15.000] This is a demo in serverless environment`
-      }
-    });
-  } catch (error) {
-    console.error('Lyric Get Error:', error);
-    res.status(500).json({
-      code: 500,
-      message: error.message
-    });
-  }
-});
+    if (!id) {
+      return res.status(400).json({
+        code: 400,
+        message: 'Song ID is required'
+      });
+    }
 
-router.post('/translate', async (req, res) => {
-  try {
-    const { lyric, targetLang } = req.body;
+    console.log('Lyric request for song ID:', id);
 
-    // 模拟歌词翻译功能
-    res.json({
-      code: 200,
-      data: {
-        translatedLyric: `[00:00.000] Translated Lyrics\n[00:10.000] This is translated version`
-      }
-    });
+    // 代理请求到 netease-cloud-music-api
+    const targetUrl = `http://localhost:30488/lyric?id=${id}`;
+
+    const response = await fetch(targetUrl);
+    const data = await response.json();
+
+    res.json(data);
   } catch (error) {
-    console.error('Lyric Translate Error:', error);
+    console.error('Lyric error:', error);
     res.status(500).json({
       code: 500,
       message: error.message
