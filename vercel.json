@@ -1,0 +1,28 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "dist-serverless/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "dist-serverless/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "dist-serverless/index.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "dist-serverless/index.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  }
+}

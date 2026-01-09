@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Serverless API 测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .success { background-color: #d4edda; }
+        .error { background-color: #f8d7da; }
+        button { padding: 8px 15px; margin: 5px; }
+        pre { background-color: #f8f9fa; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>Serverless API 测试页面</h1>
+    <p>Serverless API 应该在 http://localhost:3000 运行</p>
+
+    <div class="test-section">
+        <h3>健康检查</h3>
+        <button onclick="testHealth()">测试健康检查</button>
+        <div id="health-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>搜索功能</h3>
+        <input type="text" id="search-input" value="海阔天空" placeholder="输入搜索关键词">
+        <button onclick="testSearch()">测试搜索</button>
+        <div id="search-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>歌词功能</h3>
+        <input type="text" id="lyric-id" value="123456" placeholder="输入歌曲ID">
+        <button onclick="testLyric()">测试歌词</button>
+        <div id="lyric-result"></div>
+    </div>
+
+    <script>
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            try {
+                const response = await fetch('http://localhost:3000/api/health');
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <strong>健康检查成功!</strong><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>健康检查失败:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testSearch() {
+            const keyword = document.getElementById('search-input').value || '海阔天空';
+            const resultDiv = document.getElementById('search-result');
+            try {
+                const response = await fetch(`http://localhost:3000/api/search/?keywords=${encodeURIComponent(keyword)}&limit=5`);
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <strong>搜索成功!</strong><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>搜索失败:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testLyric() {
+            const songId = document.getElementById('lyric-id').value || '123456';
+            const resultDiv = document.getElementById('lyric-result');
+            try {
+                const response = await fetch(`http://localhost:3000/api/lyric/?id=${songId}`);
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <div class="success">
+                        <strong>歌词获取成功!</strong><br>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>歌词获取失败:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

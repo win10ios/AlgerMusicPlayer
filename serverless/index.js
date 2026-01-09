@@ -58,16 +58,30 @@ async function startNcmApi() {
   }
 }
 
-// 在启动时尝试启动 NCM API，但不阻塞应用启动
-startNcmApi().catch((err) => {
-  console.error('Failed to start NCM API:', err);
-});
+// 在 Vercel serverless 环境中，不启动 NCM API 服务
+// API 路由会通过模块加载方式工作
+if (process.env.VERCEL) {
+  console.log('Running in Vercel environment - skipping NCM API server startup');
+} else {
+  // 在启动时尝试启动 NCM API，但不阻塞应用启动
+  startNcmApi().catch((err) => {
+    console.error('Failed to start NCM API:', err);
+  });
+}
 
 // 创建 Express 应用
 const app = express();
 
-// 启用 CORS
-app.use(cors());
+// 启用 CORS - 配置更宽松的跨域策略以支持 Vercel 部署
+app.use(
+  cors({
+    origin: '*', // 允许所有来源
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    credentials: true,
+    maxAge: 86400 // 预检请求缓存 24 小时
+  })
+);
 
 // 解析 JSON 请求体
 app.use(express.json({ limit: '10mb' }));
@@ -115,22 +129,10 @@ app.use('/api/user', safeImport('./api/user'));
 app.use('/api/playlist', safeImport('./api/playlist'));
 app.use('/api/artist', safeImport('./api/artist'));
 app.use('/api/album', safeImport('./api/album'));
-
-// 为缺失的路由创建占位符
-const createPlaceholderRouter = (name) => {
-  const router = require('express').Router();
-  router.all('*', (req, res) => {
-    console.log(`[Placeholder] ${name} API called:`, req.method, req.path);
-    res.json({
-      code: 200,
-      message: `${name} API is running in serverless mode`,
-      path: req.path
-    });
-  });
-  return router; // 添加 return 语句
-};
-
-app.use('/api/mv', createPlaceholderRouter('MV'));
+app.use('/api/mv', safeImport('./api/mv'));
+app.use('/api/bilibili', safeImport('./api/bilibili'));
+app.use('/api/login', safeImport('./api/login'));
+app.use('/api/recommend', safeImport('./api/recommend'));
 
 // 其他 API 路由
 app.use('/api/lx-music', safeImport('./api/lxMusicHttp'));
@@ -195,8 +197,10 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 导出处理函数以供 serverless 使用
-module.exports = app;
+// Vercel Serverless Function handler
+module.exports = (req, res) => {
+  app(req, res);
+};
 
 // 如果直接运行此文件（非 serverless 环境），启动服务器
 if (require.main === module) {

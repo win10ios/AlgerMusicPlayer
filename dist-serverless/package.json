@@ -2,10 +2,10 @@
   "name": "alger-music-player-serverless",
   "version": "1.0.0",
   "description": "Alger Music Player for Serverless Environment",
-  "main": "index.js",
+  "main": "serverless/index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "node serverless/index.js",
+    "dev": "nodemon serverless/index.js",
     "build": "npm run build:web",
     "build:web": "vite build --config electron.vite.config.ts",
     "deploy": "node deploy.js"

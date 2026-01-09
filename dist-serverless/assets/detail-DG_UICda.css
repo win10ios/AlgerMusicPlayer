@@ -1,0 +1,327 @@
+.artist-page[data-v-ce4123ec] {
+  min-height: 100vh;
+  width: 100%;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  padding-bottom: 6rem;
+}
+.artist-page[data-v-ce4123ec]:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+}
+.artist-page .nav-header[data-v-ce4123ec] {
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.artist-page .nav-header[data-v-ce4123ec]:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+}
+.artist-page .nav-header i[data-v-ce4123ec] {
+  margin-right: 1rem;
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+.artist-page .nav-header .page-title[data-v-ce4123ec] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
+.artist-page .artist-header[data-v-ce4123ec] {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+@media (min-width: 768px) {
+.artist-page .artist-header[data-v-ce4123ec] {
+    flex-direction: row;
+    gap: 1.5rem;
+}
+}
+.artist-page .artist-header .artist-cover[data-v-ce4123ec] {
+  display: flex;
+  justify-content: center;
+}
+@media (min-width: 768px) {
+.artist-page .artist-header .artist-cover[data-v-ce4123ec] {
+    justify-content: flex-start;
+}
+}
+.artist-page .artist-header .artist-cover .artist-avatar[data-v-ce4123ec] {
+  height: 10rem;
+  width: 10rem;
+  border-radius: 1rem;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+@media (min-width: 768px) {
+.artist-page .artist-header .artist-cover .artist-avatar[data-v-ce4123ec] {
+    height: 12rem;
+    width: 12rem;
+}
+}
+.artist-page .artist-header .artist-info[data-v-ce4123ec] {
+  flex: 1 1 0%;
+}
+.artist-page .artist-header .artist-info .artist-name[data-v-ce4123ec] {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+}
+@media (min-width: 768px) {
+.artist-page .artist-header .artist-info .artist-name[data-v-ce4123ec] {
+    text-align: left;
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+}
+}
+.artist-page .artist-header .artist-info .artist-alias[data-v-ce4123ec] {
+  margin-bottom: 0.5rem;
+  text-align: center;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+.artist-page .artist-header .artist-info .artist-alias[data-v-ce4123ec]:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+}
+@media (min-width: 768px) {
+.artist-page .artist-header .artist-info .artist-alias[data-v-ce4123ec] {
+    text-align: left;
+}
+}
+.artist-page .artist-header .artist-info .artist-desc[data-v-ce4123ec] {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+}
+.artist-page .artist-header .artist-info .artist-desc[data-v-ce4123ec]:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+@media (min-width: 768px) {
+.artist-page .artist-header .artist-info .artist-desc[data-v-ce4123ec] {
+    text-align: left;
+}
+}
+.artist-page .content-tabs[data-v-ce4123ec] {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.artist-page .content-tabs[data-v-ce4123ec] .n-tabs-nav {
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+.artist-page .content-tabs[data-v-ce4123ec] .n-tabs-nav:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity, 1));
+}
+.artist-page .albums-grid[data-v-ce4123ec] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  padding-bottom: 10rem;
+}
+@media (min-width: 640px) {
+.artist-page .albums-grid[data-v-ce4123ec] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+}
+@media (min-width: 768px) {
+.artist-page .albums-grid[data-v-ce4123ec] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+}
+@media (min-width: 1024px) {
+.artist-page .albums-grid[data-v-ce4123ec] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+}
+.artist-page .loading-more[data-v-ce4123ec] {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-align: center;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+.artist-page .loading-more[data-v-ce4123ec]:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+}
+.artist-page .load-more-trigger[data-v-ce4123ec] {
+  height: 1rem;
+  width: 100%;
+}
+.artist-page .artist-description .description-content[data-v-ce4123ec] {
+  white-space: pre-wrap;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  line-height: 1.625;
+}
+.artist-page .songs-toolbar[data-v-ce4123ec] {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.artist-page .songs-toolbar .toolbar-left[data-v-ce4123ec],
+.artist-page .songs-toolbar .toolbar-right[data-v-ce4123ec] {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.artist-page .search-container[data-v-ce4123ec] {
+  max-width: 28rem;
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.artist-page .search-container.search-expanded[data-v-ce4123ec] {
+  width: 13rem;
+}
+.artist-page .search-container .search-button[data-v-ce4123ec] {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.artist-page .search-container .search-button[data-v-ce4123ec]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(222 226 230 / var(--tw-bg-opacity, 1));
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+.artist-page .search-container .search-button[data-v-ce4123ec]:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+}
+.artist-page .search-container .search-button[data-v-ce4123ec]:hover:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(61 61 61 / var(--tw-bg-opacity, 1));
+}
+.artist-page .search-container .search-button .icon[data-v-ce4123ec] {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.artist-page .search-container[data-v-ce4123ec] .n-input {
+  --tw-bg-opacity: 1;
+  background-color: rgb(233 236 239 / var(--tw-bg-opacity, 1));
+}
+.artist-page .search-container[data-v-ce4123ec] .n-input:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(45 45 45 / var(--tw-bg-opacity, 1));
+}
+.artist-page .layout-toggle .toggle-button[data-v-ce4123ec],
+.artist-page .action-button[data-v-ce4123ec] {
+  display: flex;
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.artist-page .layout-toggle .toggle-button[data-v-ce4123ec]:hover,
+.artist-page .action-button[data-v-ce4123ec]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(222 226 230 / var(--tw-bg-opacity, 1));
+}
+.artist-page .layout-toggle .toggle-button[data-v-ce4123ec]:is(.dark *),
+.artist-page .action-button[data-v-ce4123ec]:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+}
+.artist-page .layout-toggle .toggle-button[data-v-ce4123ec]:hover:is(.dark *),
+.artist-page .action-button[data-v-ce4123ec]:hover:is(.dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(61 61 61 / var(--tw-bg-opacity, 1));
+}
+.artist-page .layout-toggle .toggle-button .icon[data-v-ce4123ec],
+.artist-page .action-button .icon[data-v-ce4123ec] {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.artist-page .layout-toggle .toggle-button.hover-green:hover .icon[data-v-ce4123ec],
+.artist-page .action-button.hover-green:hover .icon[data-v-ce4123ec] {
+  --tw-text-opacity: 1;
+  color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+.artist-page .no-result[data-v-ce4123ec] {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  text-align: center;
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
+}
+.artist-page .no-result[data-v-ce4123ec]:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity, 1));
+}
+.artist-page .song-virtual-list[data-v-ce4123ec] .n-virtual-list__scroll {
+  scrollbar-width: thin;
+}
+.artist-page .song-virtual-list[data-v-ce4123ec] .n-virtual-list__scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.artist-page .song-virtual-list[data-v-ce4123ec] .n-virtual-list__scroll::-webkit-scrollbar-thumb {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity, 1));
+}
+.artist-page .song-virtual-list[data-v-ce4123ec] .n-virtual-list__scroll:is(.dark *)::-webkit-scrollbar-thumb {
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity, 1));
+}
+.artist-page .double-item[data-v-ce4123ec] {
+  margin-bottom: 0.5rem;
+  border-radius: 1.5rem;
+  background-color: rgb(248 249 250 / var(--tw-bg-opacity, 1));
+  --tw-bg-opacity: 0.3;
+}
+.artist-page .double-item[data-v-ce4123ec]:is(.dark *) {
+  background-color: rgb(22 22 22 / var(--tw-bg-opacity, 1));
+  --tw-bg-opacity: 0.2;
+}
+.mobile .songs-toolbar[data-v-ce4123ec] {
+  margin-bottom: 0px;
+}
